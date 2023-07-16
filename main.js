@@ -23,6 +23,10 @@ context.fillRect(0, 0, canvas.width, canvas.height);
 
    calculateBtn.addEventListener("click", () => {
 
+      // Reset a black square
+      context.fillStyle = 'black';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
       const { num1, num2 } = getNumbers();
 
       WebAssembly.instantiateStreaming(fetch('/wasm.wasm')).then(w0 => {
