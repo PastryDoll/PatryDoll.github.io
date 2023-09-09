@@ -12,7 +12,7 @@ foodY = 0
 
 bodySize = 1
 step = 100
-speed = 10
+speed = Math.floor(window.innerWidth*0.01)
 dead = false
 
 // Initial position of the red square
@@ -96,7 +96,7 @@ function initializeGame(){
 
     bodySize = 1
     step = 100
-    speed = 10
+    speed = Math.floor(window.innerWidth*0.002)
     dead = false
 
     // Initial position of the red square
