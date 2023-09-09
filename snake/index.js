@@ -6,19 +6,18 @@ const context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+BlipFood = true
+foodX = 0
+foodY = 0
 
-let BlipFood = true
-let foodX = 0
-let foodY = 0
-
-let bodySize = 1
-let step = 100
-let speed = 10
-let dead = false
+bodySize = 1
+step = 100
+speed = 10
+dead = false
 
 // Initial position of the red square
-let X = 0;
-let Y = 0;
+X = 0;
+Y = 0;
 
 // Function to update the red square's position
 function updateSquarePosition(x, y) {
@@ -52,7 +51,10 @@ class SnakeBody {
     update(x,y){
         if (this.body.length >= 2){
             for (let i = this.body.length -1; i > 0 ; i-- ){
-                if (this.body[i] === this.body[0]){dead = true; console.log("Looser")}
+                // check if dead
+                if ((this.body.length > 2) && (Snake.body[i].X === Snake.body[0].X) && (Snake.body[i].Y === Snake.body[0].Y)){
+                    dead = true; console.log("Looser")}
+
                 this.body[i] = this.body[i-1]
             }
         }
@@ -61,6 +63,12 @@ class SnakeBody {
         X = X + this.vX;
         Y = Y + this.vY;
         this.body[0] = {X,Y}
+    }
+    addManySegments(){
+        for (let i = 0; i<100; i++){
+            this.addSegment()
+            speed = 20
+        }
     }
 
     draw(){
@@ -81,10 +89,27 @@ function getRandomMultipleOfTen(min, max) {
     return randomValue - (randomValue % speed); // Ensure it's a multiple of 10
 }
 
+function initializeGame(){
+    BlipFood = true
+    foodX = 0
+    foodY = 0
 
-(() => {
+    bodySize = 1
+    step = 100
+    speed = 10
+    dead = false
+
+    // Initial position of the red square
+    X = 0;
+    Y = 0;
     Snake = new SnakeBody()
     Snake.body.push({X,Y})
+
+}
+
+(() => {
+    
+    initializeGame()
 
     function update(){
         
@@ -93,13 +118,6 @@ function getRandomMultipleOfTen(min, max) {
             foodY= getRandomMultipleOfTen(0,canvas.height-step)
             
             BlipFood = false
-        }
-        
-        if  ((((foodX >= X) && (foodX <= X + step)) && (( foodY >= Y) && (foodY <= Y + step))) ||
-            (((foodX + 50 >= X) && (foodX + 50 <= X + step)) && (( foodY + 50 >= Y) && (foodY + 50 <= Y + step))))
-        {
-            Snake.addSegment()
-            BlipFood = true
         }
 
         if (Snake.body[0].X > window.innerWidth){
@@ -117,6 +135,19 @@ function getRandomMultipleOfTen(min, max) {
         else {
             Snake.update(Snake.body[0].X,Snake.body[0].Y)
         }
+
+        if  ((((foodX >= X) && (foodX <= X + step)) && (( foodY >= Y) && (foodY <= Y + step))) ||
+        (((foodX + 50 >= X) && (foodX + 50 <= X + step)) && (( foodY + 50 >= Y) && (foodY + 50 <= Y + step))))
+        {
+            Snake.addSegment()
+            BlipFood = true
+        }
+        
+        if (dead){
+            delete Snake
+            initializeGame()
+        }
+
 
     }
 
