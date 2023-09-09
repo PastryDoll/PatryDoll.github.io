@@ -29,7 +29,7 @@ context.fillRect(0, 0, canvas.width, canvas.height);
 
       const { num1, num2 } = getNumbers();
 
-      WebAssembly.instantiateStreaming(fetch('/wasm.wasm')).then(w0 => {
+      WebAssembly.instantiateStreaming(fetch('/wasmhello/wasm.wasm')).then(w0 => {
       const w = w0.instance.exports;
 
       // Call the 'adder' function and get the result
